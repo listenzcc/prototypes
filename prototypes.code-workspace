@@ -3,7 +3,14 @@
     {
       "path": "."
     },
-    { "path": "./keyboard hiker" }
+    { "path": "./keyboard hiker" },
+    { "path": "./curses demo" },
+    { "path": "./localhost communication" },
+    { "path": "./IP location app" }
   ],
-  "settings": {}
+  "settings": {
+    "cSpell.words": [
+      "tkinter"
+    ]
+  }
 }

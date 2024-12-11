@@ -1,0 +1,9 @@
+TCPHost:
+  host: "localhost"
+  port: 18890
+  clientsLimit: 5
+  bufsize: 1024
+
+message:
+  encoding: "utf-8"
+  leadingLength: 8
