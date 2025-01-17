@@ -6,11 +6,12 @@
     { "path": "./keyboard hiker" },
     { "path": "./curses demo" },
     { "path": "./localhost communication" },
-    { "path": "./IP location app" }
+    { "path": "./IP location app" },
+    { "path": "./server monitor" },
+    { "path": "./rich logging" },
+    { "path": "./nicegui" }
   ],
   "settings": {
-    "cSpell.words": [
-      "tkinter"
-    ]
+    "cSpell.words": ["tkinter"]
   }
 }
