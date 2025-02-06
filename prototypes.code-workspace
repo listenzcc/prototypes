@@ -3,13 +3,30 @@
     {
       "path": "."
     },
-    { "path": "./keyboard hiker" },
-    { "path": "./curses demo" },
-    { "path": "./localhost communication" },
-    { "path": "./IP location app" },
-    { "path": "./server monitor" },
-    { "path": "./rich logging" },
-    { "path": "./nicegui" }
+    {
+      "path": "./keyboard hiker"
+    },
+    {
+      "path": "./curses demo"
+    },
+    {
+      "path": "./localhost communication"
+    },
+    {
+      "path": "./IP location app"
+    },
+    {
+      "path": "./server monitor"
+    },
+    {
+      "path": "./rich logging"
+    },
+    {
+      "path": "./nicegui"
+    },
+    {
+      "path": "app gallery"
+    }
   ],
   "settings": {
     "cSpell.words": ["tkinter"]
