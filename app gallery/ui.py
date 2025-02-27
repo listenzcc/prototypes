@@ -80,7 +80,7 @@ def create_ui():
             for desktop in desktops:
                 with ui.card().style('max-width: 300px'):
                     # Use CSS for bold text
-                    ui.label(f'Desktop {desktop.id}').style(
+                    ui.label(f'Desktop {desktop.id} | {desktop.name}').style(
                         'font-weight: bold;')
                     app_counter = 1  # Initialize app counter
                     for app in apps:

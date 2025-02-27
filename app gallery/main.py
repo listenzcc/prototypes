@@ -82,16 +82,18 @@ def suppress_event(e):
 
 # %% ---- 2025-02-05 ------------------------
 # Play ground
-if __name__ in ['__main__', '__mp_main__']:
+if __name__ in ['__main__', '1__mp_main__']:
     # Switch through desktops and apps
     # rolling_all_desktops()
     # rolling_all_apps(current_desktop=False)
+
+    print(__name__)
 
     desktops = get_all_desktops()
     print([e.id for e in desktops])
 
     current_desktop = get_current_desktop()
-    inspect(current_desktop)
+    # inspect(current_desktop)
 
     apps = get_app_and_titles()
     print(apps)
@@ -99,10 +101,10 @@ if __name__ in ['__main__', '__mp_main__']:
     print(selected_apps)
 
     current_app = get_current_app()
-    inspect(current_app)
+    # inspect(current_app)
 
     # Simulation of the keyboard write.
-    if False:
+    if True:
         keyboard.hook(suppress_event, suppress=True)
         try:
             app = selected_apps[0]
@@ -122,7 +124,7 @@ if __name__ in ['__main__', '__mp_main__']:
     if frameless:
         attach_titlebar(title)
     create_ui()
-    ui.run(title=title, frameless=frameless)
+    ui.run(title=title, frameless=frameless, reload=False)
 
 
 # %% ---- 2025-02-05 ------------------------
