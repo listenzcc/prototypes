@@ -35,6 +35,9 @@
     },
     {
       "path": "geometry computation"
+    },
+    {
+      "path": "python objects"
     }
   ],
   "settings": {
