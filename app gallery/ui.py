@@ -73,10 +73,14 @@ def create_ui():
 
     @ui.refreshable
     def refresh_ui():
-        row.clear()
-        with row:  # Use a row to contain all cards
+        try:
             desktops = get_all_desktops()
             apps = get_app_and_titles(current_desktop=False)
+        except:
+            return
+
+        row.clear()
+        with row:  # Use a row to contain all cards
             for desktop in desktops:
                 with ui.card().style('max-width: 300px'):
                     # Use CSS for bold text

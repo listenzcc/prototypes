@@ -113,6 +113,8 @@ if __name__ in ['__main__', '1__mp_main__']:
             # app['app'].set_focus()
             keyboard.write(f'Start, {time.ctime()}, Stop.\r\n', delay=0.01)
             keyboard.write(f'中文测试\r\n'*10, delay=0.01)
+        except IndexError:
+            print(f'Nothing for keyboard to write.')
         finally:
             keyboard.unhook_all()
             switch_to_app(current_app)

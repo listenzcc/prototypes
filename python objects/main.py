@@ -6,6 +6,7 @@ Copyright & Email: chuncheng.zhang@ia.ac.cn
 
 Purpose:
     The main program of python objects display.
+    Running the script to demonstrate the Queue can be used across multiple processes, but the lst can not.
 
 Functions:
     1. Requirements and constants
