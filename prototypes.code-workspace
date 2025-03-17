@@ -41,6 +41,9 @@
     },
     {
       "path": "count files"
+    },
+    {
+      "path": "flask with post"
     }
   ],
   "settings": {
