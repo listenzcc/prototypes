@@ -21,6 +21,18 @@ class MyRequest:
         response = requests.post(url, json=body)
         return response
 
+    def post_event_stream(self, path: str):
+        '''
+        Connect to the stream endpoint and print messages.
+
+        :param path str: the path to the stream endpoint.
+        '''
+        url = f'{self.scheme}://{self.hostname}/{path}'
+        with requests.post(url, stream=True, json={}) as response:
+            for line in response.iter_lines():
+                if line:
+                    print(f"Received Chunk: {line.decode('utf-8')}")
+
 
 # %%
 if __name__ == '__main__':
@@ -36,4 +48,7 @@ if __name__ == '__main__':
     resp = mr.post('echo-post', body)
     print(f'Status Code: {resp.status_code}')
     print(f'Response JSON: {resp.json()}')
+
+    print("Stream starts, listening for messages...")
+    mr.post_event_stream('demo-event-stream')
     sys.exit(0)
