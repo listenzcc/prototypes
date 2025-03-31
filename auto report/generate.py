@@ -1,6 +1,9 @@
 import os
-from PIL import Image as PILImage
+import matplotlib.pyplot as plt
+
+from io import BytesIO
 from datetime import datetime
+from PIL import Image as PILImage
 
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak, BaseDocTemplate, Frame, PageTemplate
@@ -195,18 +198,26 @@ class PDFReportGenerator:
         self.elements.append(Paragraph(text, self.styles[style]))
         self.elements.append(Spacer(1, 0.2*inch))
 
-    def add_image(self, image_path, caption=None, width=None, height=None):
+    def add_image(self, image_path_or_fig, caption=None, width=None, height=None):
         """添加图像
 
         参数:
-            image_path: 图像文件路径
+            image_path_or_fig: 图像文件路径或matplotlib图形对象
             caption: 图像标题 (可选)
             width: 图像宽度 (可选)
             height: 图像高度 (可选)
         """
-        # 获取图像原始尺寸
-        with PILImage.open(image_path) as img:
-            img_width, img_height = img.size
+        if isinstance(image_path_or_fig, str):
+            # 如果是文件路径，加载图像
+            with PILImage.open(image_path_or_fig) as img:
+                img_width, img_height = img.size
+        else:
+            # 如果是matplotlib图形对象，保存为字节流
+            buf = BytesIO()
+            image_path_or_fig.savefig(buf, format='png')
+            buf.seek(0)
+            with PILImage.open(buf) as img:
+                img_width, img_height = img.size
 
         # 计算保持纵横比的尺寸
         if width and height:
@@ -230,7 +241,12 @@ class PDFReportGenerator:
             width = (height / img_height) * img_width
 
         # 添加图像
-        img = Image(image_path, width=width, height=height)
+        if isinstance(image_path_or_fig, str):
+            img = Image(image_path_or_fig, width=width, height=height)
+        else:
+            buf.seek(0)
+            img = Image(buf, width=width, height=height)
+
         self.elements.append(img)
 
         # 添加图像标题（如果有）
@@ -354,6 +370,12 @@ if __name__ == "__main__":
         "在Web开发方面，Python提供了多种框架，如Django和Flask。这些框架使得开发高效且易于维护的Web应用程序变得更加简单。")
     report.add_paragraph(
         "Python的跨平台特性使得它可以在Windows、MacOS和Linux等操作系统上运行。这使得它成为了开发跨平台应用程序的理想选择。")
+
+    fig, ax = plt.subplots(1, 1)
+    ax.plot([1, 2, 3], [4, 5, 6])
+    ax.set_title('Matplotlib')
+    report.add_image(fig, caption="图2：示例 Matplotlib 图", width=5*inch)
+
     report.add_paragraph("Python的动态类型系统和自动内存管理功能使得开发者可以专注于实现功能，而无需担心底层细节。")
     report.add_paragraph(
         "在教育领域，Python因其易学易用的特点，成为了编程入门的首选语言。许多学校和大学都将Python作为计算机科学课程的基础语言。")
