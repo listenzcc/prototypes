@@ -58,9 +58,10 @@ class PDFReportGenerator:
             0.5 * inch,
             id='footer'
         )
+
         self.doc.addPageTemplates([
-            PageTemplate(id='FirstPage', frames=[
-                         content_frame, footer_frame], onPage=self._render_page),
+            PageTemplate(id='RenderPages', frames=[
+                         content_frame, footer_frame], onPageEnd=self._render_page),
             PageTemplate(id='LaterPages', frames=[
                          content_frame, footer_frame], onPage=self._later_pages)
         ])
@@ -71,7 +72,7 @@ class PDFReportGenerator:
             # 尝试使用系统字体
             font_paths = [
                 # Windows
-                "C:/Windows/Fonts/msyh.ttc",  # 宋体
+                "C:/Windows/Fonts/msyh.ttc",  # 微软雅黑
                 "C:/Windows/Fonts/simsun.ttc",  # 宋体
                 "C:/Windows/Fonts/simhei.ttf",  # 黑体
                 # MacOS
@@ -269,12 +270,27 @@ class PDFReportGenerator:
         self.elements.append(Paragraph(text, self.styles['Stopper']))
 
     def _render_page(self, canvas: canvas.Canvas, doc):
-        """Customizes the first page (adds footer at the bottom)."""
+        """Customizes the first page (adds header and footer)."""
         canvas.saveState()
-        # Footer text
-        footer_text = f'序列号：{self.serial.upper()}'  # "Python自动报告生成 - 仅供学习使用"
+        # Header text (serial number)
+        header_text = f'序列号：{self.serial.upper()}'
         canvas.setFont(self.chinese_font, 8)
         canvas.setFillColor('gray')
+        canvas.drawString(
+            self.doc.leftMargin,  # self.page_size[0] / 2.0,
+            self.page_size[1] - 0.5 * inch,  # Ensure header is at the top
+            header_text
+        )
+        # Draw line below the header
+        canvas.setStrokeColor('gray')
+        canvas.line(
+            self.doc.leftMargin,
+            self.page_size[1] - 0.55 * inch,
+            self.page_size[0] - self.doc.rightMargin,
+            self.page_size[1] - 0.55 * inch
+        )
+        # Footer text
+        footer_text = "Python自动报告生成 - 仅供学习使用"
         canvas.drawCentredString(
             self.page_size[0] / 2.0,
             0.5 * inch,  # Ensure footer is at the bottom
@@ -291,11 +307,27 @@ class PDFReportGenerator:
         canvas.restoreState()
 
     def _later_pages(self, canvas, doc):
-        """Adds footer and page numbers to subsequent pages."""
+        """Adds header, footer, and page numbers to subsequent pages."""
         canvas.saveState()
+        # Header text (serial number)
+        header_text = f'序列号：{self.serial.upper()}'
+        canvas.setFont(self.chinese_font, 8)
+        canvas.setFillColor('gray')
+        canvas.drawCentredString(
+            self.page_size[0] / 2.0,
+            self.page_size[1] - 0.5 * inch,  # Ensure header is at the top
+            header_text
+        )
+        # Draw line below the header
+        canvas.setStrokeColor('gray')
+        canvas.line(
+            self.doc.leftMargin,
+            self.page_size[1] - 0.55 * inch,
+            self.page_size[0] - self.doc.rightMargin,
+            self.page_size[1] - 0.55 * inch
+        )
         # Footer text
         footer_text = "Python自动报告生成 - 仅供学习使用"
-        canvas.setFont(self.chinese_font, 8)
         canvas.drawCentredString(
             self.page_size[0] / 2.0,
             0.5 * inch,  # Ensure footer is at the bottom
