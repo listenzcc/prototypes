@@ -1,3 +1,11 @@
+'''
+
+经验1： 错误信息 LayoutError: Flowable too large in frame 'footer' 表明系统试图将图像放入 footer 帧，而实际上应该放入 content 帧。这是因为：
+- 你的 BaseDocTemplate 创建了两个帧：content 和 footer
+- 当内容超过 content 帧容量时，ReportLab 会尝试将内容放入其他帧
+- 图像被错误地尝试放入 footer 帧，导致尺寸不匹配
+
+'''
 import os
 import matplotlib.pyplot as plt
 
@@ -60,10 +68,12 @@ class PDFReportGenerator:
         )
 
         self.doc.addPageTemplates([
+            # PageTemplate(id='RenderPages', frames=[
+            #              content_frame, footer_frame], onPageEnd=self._render_page),
             PageTemplate(id='RenderPages', frames=[
-                         content_frame, footer_frame], onPageEnd=self._render_page),
-            PageTemplate(id='LaterPages', frames=[
-                         content_frame, footer_frame], onPage=self._later_pages)
+                         content_frame], onPageEnd=self._render_page),
+            # PageTemplate(id='LaterPages', frames=[
+            #              content_frame, footer_frame], onPage=self._later_pages)
         ])
 
     def _register_chinese_font(self):
@@ -248,6 +258,7 @@ class PDFReportGenerator:
             buf.seek(0)
             img = Image(buf, width=width, height=height)
 
+        # Ensure the image fits within the content frame
         self.elements.append(img)
 
         # 添加图像标题（如果有）
@@ -271,40 +282,50 @@ class PDFReportGenerator:
 
     def _render_page(self, canvas: canvas.Canvas, doc):
         """Customizes the first page (adds header and footer)."""
+        print('The canvas:', canvas)
+        from rich import inspect
+        inspect(canvas)
         canvas.saveState()
-        # Header text (serial number)
-        header_text = f'序列号：{self.serial.upper()}'
-        canvas.setFont(self.chinese_font, 8)
-        canvas.setFillColor('gray')
-        canvas.drawString(
-            self.doc.leftMargin,  # self.page_size[0] / 2.0,
-            self.page_size[1] - 0.5 * inch,  # Ensure header is at the top
-            header_text
-        )
-        # Draw line below the header
-        canvas.setStrokeColor('gray')
-        canvas.line(
-            self.doc.leftMargin,
-            self.page_size[1] - 0.55 * inch,
-            self.page_size[0] - self.doc.rightMargin,
-            self.page_size[1] - 0.55 * inch
-        )
-        # Footer text
-        footer_text = "Python自动报告生成 - 仅供学习使用"
-        canvas.drawCentredString(
-            self.page_size[0] / 2.0,
-            0.5 * inch,  # Ensure footer is at the bottom
-            footer_text
-        )
-        # Page number
-        current_page = doc.page
-        page_number = f"第 {current_page} 页"
-        canvas.drawCentredString(
-            self.page_size[0] / 2.0,
-            0.35 * inch,  # Page number below footer text
-            page_number
-        )
-        canvas.restoreState()
+        try:
+            # Header text (serial number)
+            header_text = f'序列号：{self.serial.upper()}'
+            canvas.setFont(self.chinese_font, 8)
+            canvas.setFillColor('gray')
+            canvas.drawString(
+                self.doc.leftMargin,  # self.page_size[0] / 2.0,
+                self.page_size[1] - 0.5 * inch,  # Ensure header is at the top
+                header_text
+            )
+            # Draw line below the header
+            canvas.setStrokeColor('gray')
+            canvas.line(
+                self.doc.leftMargin,
+                self.page_size[1] - 0.55 * inch,
+                self.page_size[0] - self.doc.rightMargin,
+                self.page_size[1] - 0.55 * inch
+            )
+            # Footer text
+            footer_text = "Python自动报告生成 - 仅供学习使用"
+            canvas.drawCentredString(
+                self.page_size[0] / 2.0,
+                0.5 * inch,  # Ensure footer is at the bottom
+                footer_text
+            )
+            # Page number
+            current_page = doc.page
+            page_number = f"第 {current_page} 页"
+            canvas.drawCentredString(
+                self.page_size[0] / 2.0,
+                0.35 * inch,  # Page number below footer text
+                page_number
+            )
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            raise e
+        finally:
+            canvas.restoreState()
+            print('Rendered canvas:', canvas)
 
     def _later_pages(self, canvas, doc):
         """Adds header, footer, and page numbers to subsequent pages."""
@@ -403,10 +424,13 @@ if __name__ == "__main__":
     report.add_paragraph(
         "Python的跨平台特性使得它可以在Windows、MacOS和Linux等操作系统上运行。这使得它成为了开发跨平台应用程序的理想选择。")
 
-    fig, ax = plt.subplots(1, 1)
-    ax.plot([1, 2, 3], [4, 5, 6])
-    ax.set_title('Matplotlib')
-    report.add_image(fig, caption="图2：示例 Matplotlib 图", width=5*inch)
+    for i in range(10):
+        fig, ax = plt.subplots(1, 1)
+        ax.plot([1, 2, 3], [4, 5, 6])
+        ax.set_title('Matplotlib')
+        caption = f"图{i+2}：示例 Matplotlib 图"
+        report.add_image(fig, caption=caption, width=5*inch)
+        print(caption)
 
     report.add_paragraph("Python的动态类型系统和自动内存管理功能使得开发者可以专注于实现功能，而无需担心底层细节。")
     report.add_paragraph(
