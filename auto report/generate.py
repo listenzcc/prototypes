@@ -7,6 +7,7 @@
 
 '''
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 
 from io import BytesIO
@@ -283,8 +284,8 @@ class PDFReportGenerator:
     def _render_page(self, canvas: canvas.Canvas, doc):
         """Customizes the first page (adds header and footer)."""
         print('The canvas:', canvas)
-        from rich import inspect
-        inspect(canvas)
+        # from rich import inspect
+        # inspect(canvas)
         canvas.saveState()
         try:
             # Header text (serial number)
@@ -425,8 +426,11 @@ if __name__ == "__main__":
         "Python的跨平台特性使得它可以在Windows、MacOS和Linux等操作系统上运行。这使得它成为了开发跨平台应用程序的理想选择。")
 
     for i in range(10):
-        fig, ax = plt.subplots(1, 1)
-        ax.plot([1, 2, 3], [4, 5, 6])
+        sz = np.random.randint(2, 5, (2,))
+        fig, ax = plt.subplots(1, 1, figsize=sz)
+        x = np.random.random(10,)
+        y = np.random.random(10,)
+        ax.plot(x, y)
         ax.set_title('Matplotlib')
         caption = f"图{i+2}：示例 Matplotlib 图"
         report.add_image(fig, caption=caption, width=5*inch)
