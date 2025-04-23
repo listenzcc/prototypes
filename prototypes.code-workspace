@@ -50,6 +50,9 @@
     },
     {
       "path": "camera app"
+    },
+    {
+      "path": "signal processing window"
     }
   ],
   "settings": {
