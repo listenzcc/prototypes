@@ -53,6 +53,9 @@
     },
     {
       "path": "signal processing window"
+    },
+    {
+      "path": "logging rules"
     }
   ],
   "settings": {
