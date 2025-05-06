@@ -1,0 +1,14 @@
+2025-05-06 17:29:14.421 | ERROR    | __main__:<module>:17 - division by zero
+Traceback (most recent call last):
+
+> File "C:\Users\liste\OneDrive - 中国科学院自动化研究所\notebook\program\prototypes\logging rules\main.py", line 15, in <module>
+    1/0
+
+ZeroDivisionError: division by zero
+2025-05-06 17:30:06.358 | ERROR    | __main__:<module>:19 - division by zero
+Traceback (most recent call last):
+
+> File "C:\Users\liste\OneDrive - 中国科学院自动化研究所\notebook\program\prototypes\logging rules\main.py", line 17, in <module>
+    1/0
+
+ZeroDivisionError: division by zero
