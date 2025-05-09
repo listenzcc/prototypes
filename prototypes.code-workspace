@@ -56,6 +56,9 @@
     },
     {
       "path": "logging rules"
+    },
+    {
+      "path": "compression"
     }
   ],
   "settings": {
