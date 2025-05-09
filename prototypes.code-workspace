@@ -58,6 +58,9 @@
       "path": "logging rules"
     },
     {
+      "path": "interpolate"
+    },
+    {
       "path": "compression"
     }
   ],
